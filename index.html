@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Farhan Khan - Face Analysis</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 92%;
+    max-width: 900px;
+    margin: auto;
+}
+
+header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.insta {
+    color: #999;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.hero {
+    text-align: center;
+    padding: 80px 10px;
+}
+
+.badge {
+    display: inline-block;
+    border: 1px solid #333;
+    padding: 8px 15px;
+    border-radius: 30px;
+    color: #999;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 55px;
+    margin-top: 25px;
+    line-height: 1;
+}
+
+.gradient {
+    color: #888;
+}
+
+.hero p {
+    color: #777;
+    max-width: 550px;
+    margin: 25px auto;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+.button {
+    display: inline-block;
+    background: white;
+    color: black;
+    padding: 14px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.section {
+    padding: 30px 0;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.title h2 {
+    font-size: 28px;
+}
+
+.title p {
+    color: #666;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.upload {
+    min-height: 280px;
+    border: 1px dashed #444;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #0b0b0b;
+    overflow: hidden;
+    position: relative;
+}
+
+.upload-content {
+    padding: 30px;
+}
+
+.upload-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.upload h3 {
+    margin-bottom: 10px;
+}
+
+.upload p {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+input {
+    display: none;
+}
+
+.choose {
+    display: inline-block;
+    border: 1px solid #444;
+    padding: 12px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.preview {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: #050505;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.face-frame {
+    position: absolute;
+    width: 180px;
+    height: 230px;
+    border: 1px solid white;
+    border-radius: 50%;
+}
+
+.scan {
+    position: absolute;
+    width: 200px;
+    height: 2px;
+    background: white;
+    box-shadow: 0 0 15px white;
+    animation: scanning 2s infinite;
+}
+
+@keyframes scanning {
+    0% {
+        transform: translateY(-100px);
+    }
+
+    50% {
+        transform: translateY(100px);
+    }
+
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+.scan-text {
+    position: absolute;
+    bottom: 15px;
+    color: #aaa;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.results {
+    display: none;
+    margin-top: 20px;
+}
+
+.complete {
+    text-align: center;
+    background: #0c0c0c;
+    border: 1px solid #222;
+    border-radius: 18px;
+    padding: 25px;
+}
+
+.check {
+    font-size: 28px;
+}
+
+.complete p {
+    color: #666;
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.score-box {
+    margin-top: 15px;
+    background: #0c0c0c;
+    border: 1px solid #222;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+}
+
+.label {
+    color: #666;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.score {
+    font-size: 60px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.bar {
+    height: 5px;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: white;
+    transition: 1s;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.card {
+    background: #0b0b0b;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.card h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: #666;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.card .percent {
+    color: white;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+    color: #444;
+    padding: 60px 0 30px;
+    font-size: 11px;
+}
+
+footer a {
+    color: #888;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 45px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <div class="logo">FARHAN KHAN</div>
+
+    <a class="insta"
+       href="https://instagram.com/_farhan.xd"
+       target="_blank">
+       @_farhan.xd
+    </a>
+</header>
+
+<section class="hero">
+
+    <div class="badge">
+        FACE ANALYSIS
+    </div>
+
+    <h1>
+        Discover<br>
+        <span class="gradient">Your Features.</span>
+    </h1>
+
+    <p>
+        Explore facial symmetry, proportions and visible
+        features through a clean premium analysis interface.
+    </p>
+
+    <a class="button" href="#analysis">
+        Start Analysis
+    </a>
+
+</section>
+
+<section class="section" id="analysis">
+
+<div class="title">
+
+    <h2>Face Analysis</h2>
+
+    <p>
+        Upload a clear front-facing photo.
+    </p>
+
+</div>
+
+<div class="upload">
+
+    <div class="upload-content" id="uploadContent">
+
+        <div class="upload-icon">◉</div>
+
+        <h3>Upload Your Photo</h3>
+
+        <p>
+            JPG, PNG or WEBP
+        </p>
+
+        <label class="choose" for="photo">
+            Choose Image
+        </label>
+
+        <input
+            id="photo"
+            type="file"
+            accept="image/*"
+        >
+
+    </div>
+
+    <div class="preview" id="preview">
+
+        <img id="imagePreview">
+
+        <div class="face-frame"></div>
+
+        <div class="scan"></div>
+
+        <div class="scan-text" id="scanText">
+            SCANNING...
+        </div>
+
+    </div>
+
+</div>
+
+<div class="results" id="results">
+
+    <div class="complete">
+
+        <div class="check">✓</div>
+
+        <h3>Analysis Complete</h3>
+
+        <p>
+            Your visual profile is ready.
+        </p>
+
+    </div>
+
+    <div class="score-box">
+
+        <div class="label">
+            OVERALL VISUAL SCORE
+        </div>
+
+        <div class="score" id="score">
+            0%
+        </div>
+
+        <div class="bar">
+            <span id="mainBar"></span>
+        </div>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <div class="percent">89%</div>
+
+            <h3>Face Symmetry</h3>
+
+            <p>
+                Visual balance between facial regions.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div class="percent">86%</div>
+
+            <h3>Face Structure</h3>
+
+            <p>
+                General visual structure and definition.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div class="percent">91%</div>
+
+            <h3>Feature Balance</h3>
+
+            <p>
+                Overall harmony of visible features.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div class="percent">84%</div>
+
+            <h3>Proportion</h3>
+
+            <p>
+                General relationship between facial proportions.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<footer>
+
+    <p>
+        Designed by Farhan Khan
+    </p>
+
+    <br>
+
+    <a
+       href="https://instagram.com/_farhan.xd"
+       target="_blank">
+       Instagram • @_farhan.xd
+    </a>
+
+</footer>
+
+</div>
+
+<script>
+
+var photo = document.getElementById("photo");
+var uploadContent = document.getElementById("uploadContent");
+var preview = document.getElementById("preview");
+var imagePreview = document.getElementById("imagePreview");
+var results = document.getElementById("results");
+var scanText = document.getElementById("scanText");
+var score = document.getElementById("score");
+var mainBar = document.getElementById("mainBar");
+
+photo.addEventListener("change", function() {
+
+    var file = photo.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+
+        imagePreview.src = event.target.result;
+
+        uploadContent.style.display = "none";
+        preview.style.display = "flex";
+        results.style.display = "none";
+
+        scanText.innerText = "SCANNING FACE...";
+
+        setTimeout(function() {
+            scanText.innerText = "ANALYZING FEATURES...";
+        }, 1000);
+
+        setTimeout(function() {
+            scanText.innerText = "CALCULATING SYMMETRY...";
+        }, 2000);
+
+        setTimeout(function() {
+            scanText.innerText = "ANALYSIS COMPLETE";
+        }, 3000);
+
+        setTimeout(function() {
+
+            preview.style.display = "none";
+            results.style.display = "block";
+
+            score.innerText = "87%";
+            mainBar.style.width = "87%";
+
+        }, 3500);
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+</script>
+
+</body>
+</html>
